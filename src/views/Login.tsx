@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+import { useRouter } from 'next/navigation'
 
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
@@ -39,9 +41,16 @@ const LoginV2 = ({ mode }: { mode: Mode }) => {
   const borderedDarkIllustration = '/images/illustrations/auth/v2-login-dark-border.png'
   const borderedLightIllustration = '/images/illustrations/auth/v2-login-light-border.png'
 
+  const router = useRouter()
   const { settings } = useSettings()
   const { t } = useI18n()
-  const { login, isLoading, error, resetError } = useAuth()
+  const { login, isLoading, error, resetError, isAuthenticated } = useAuth()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/dashboard')
+    }
+  }, [isAuthenticated, router])
   const authBackground = useImageVariant(mode, lightImg, darkImg)
 
   const characterIllustration = useImageVariant(

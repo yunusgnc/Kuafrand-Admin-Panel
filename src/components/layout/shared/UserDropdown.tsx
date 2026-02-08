@@ -25,6 +25,7 @@ import { RiUser3Line, RiSettings4Line, RiMoneyDollarCircleLine, RiQuestionLine, 
 // Hook Imports
 import { useSettings } from '@/hooks/useSettings'
 import { useI18n } from '@/hooks/useI18n'
+import { useAuth } from '@/hooks/useAuth'
 
 // Icon Imports
 
@@ -49,6 +50,7 @@ const UserDropdown = () => {
   const router = useRouter()
   const settings = useSettings()
   const { t } = useI18n()
+  const { user, logout } = useAuth()
 
   const handleDropdownOpen = () => {
     !open ? setOpen(true) : setOpen(false)
@@ -66,9 +68,8 @@ const UserDropdown = () => {
     setOpen(false)
   }
 
-  const handleUserLogout = async () => {
-    // Redirect to login page
-    router.push('/login')
+  const handleUserLogout = () => {
+    logout()
   }
 
   return (
@@ -113,7 +114,9 @@ const UserDropdown = () => {
                     <Avatar alt='John Doe' src='/images/avatars/1.png' />
                     <div className='flex items-start flex-col'>
                       <Typography variant='body2' className='font-medium' color='text.primary'>
-                        John Doe
+                        {user?.first_name && user?.last_name
+                          ? `${user.first_name} ${user.last_name}`
+                          : user?.email ?? 'Admin'}
                       </Typography>
                       <Typography variant='caption'>{t('user.adminEmail')}</Typography>
                     </div>
