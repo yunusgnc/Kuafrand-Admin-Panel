@@ -15,7 +15,7 @@ export const useAuth = () => {
     async (credentials: AdminLoginRequest) => {
       try {
         await loginMutation(credentials).unwrap()
-        router.push('/home')
+        router.push('/admin/dashboard')
       } catch {
         // error handled by authSlice extraReducers
       }

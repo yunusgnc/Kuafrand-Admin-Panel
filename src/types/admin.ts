@@ -462,7 +462,7 @@ export interface UpdateReminderRequest {
 }
 
 export interface CancellationReason {
-  id: string
+  id: string | number
   reason_text?: string
   app_type?: 'user' | 'owner_worker'
   is_active?: boolean
@@ -470,7 +470,7 @@ export interface CancellationReason {
   [key: string]: unknown
 }
 
-export interface CancellationReasonListParams extends PaginationParams {}
+export interface CancellationReasonListParams extends Partial<PaginationParams> {}
 
 export interface CreateCancellationReasonRequest {
   reason_text: string
@@ -479,7 +479,7 @@ export interface CreateCancellationReasonRequest {
 }
 
 export interface UpdateCancellationReasonRequest {
-  id: string
+  id: string | number
   reason_text?: string
   app_type?: 'user' | 'owner_worker'
   is_active?: boolean
@@ -555,9 +555,15 @@ export interface UpdateSubscriptionRequest {
 export type ConfigValue = string | number | boolean | null
 
 export interface ConfigItem {
+  id?: number
   key: string
   value: ConfigValue
+  description?: string
+  updated_by?: string | number | null
+  created_at?: string
   updated_at?: string
+  updated_by_name?: string | null
+  updated_by_last_name?: string | null
   [key: string]: unknown
 }
 
@@ -574,6 +580,23 @@ export interface UpdateAppointmentCancellationRequest {
   id: string
   reason_id?: string
   status?: string
+}
+
+export interface IdpConfig {
+  name: string
+  enabled: boolean
+  appleSignInConfig?: {
+    bundleIds?: string[]
+  }
+  clientId?: string
+  clientSecret?: string
+  [key: string]: unknown
+}
+
+export interface FirebaseIdpResponse {
+  message?: string
+  idpConfigs: IdpConfig[]
+  supportedProviders: Record<string, string>
 }
 
 export interface FirebaseIdp {

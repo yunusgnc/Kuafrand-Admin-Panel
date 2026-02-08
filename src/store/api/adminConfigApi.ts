@@ -5,6 +5,7 @@ const normalizeConfig = (response: unknown): ConfigItem[] => {
   if (Array.isArray(response)) return response as ConfigItem[]
   if (response && typeof response === 'object') {
     const record = response as Record<string, unknown>
+    if (Array.isArray(record.config)) return record.config as ConfigItem[]
     if (Array.isArray(record.configs)) return record.configs as ConfigItem[]
     if (Array.isArray(record.data)) return record.data as ConfigItem[]
   }

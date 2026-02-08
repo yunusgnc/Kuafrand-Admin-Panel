@@ -25,7 +25,7 @@ const NotFound = () => {
       </Typography>
       <Typography variant='h4'>{t('errors.pageNotFound')}</Typography>
       <Typography sx={{ mt: 2, mb: 4, maxWidth: 400 }}>{t('errors.pageNotFoundDescription')}</Typography>
-      <Button variant='contained' onClick={() => router.push('/home')}>
+      <Button variant='contained' onClick={() => router.push('/dashboard')}>
         {t('navigation.home')}
       </Button>
     </Box>

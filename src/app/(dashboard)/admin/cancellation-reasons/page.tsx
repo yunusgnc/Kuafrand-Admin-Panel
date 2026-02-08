@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -36,11 +37,23 @@ export default function AdminCancellationReasonsPage() {
   const [editForm, setEditForm] = useState<UpdateCancellationReasonRequest | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<CancellationReason | null>(null)
 
-  const { data, isLoading } = useGetCancellationReasonsQuery({
-    page: page + 1,
-    limit,
-    search: search || undefined
-  })
+  const { data, isLoading } = useGetCancellationReasonsQuery({})
+
+  const filteredRows = useMemo(() => {
+    const list = data?.data ?? []
+    if (!search.trim()) return list
+    const q = search.toLowerCase()
+    return list.filter(
+      r =>
+        (r.reason_text ?? '').toLowerCase().includes(q) ||
+        (r.app_type ?? '').toLowerCase().includes(q)
+    )
+  }, [data?.data, search])
+
+  const paginatedRows = useMemo(() => {
+    const start = page * limit
+    return filteredRows.slice(start, start + limit)
+  }, [filteredRows, page, limit])
 
   const [createReason, { isLoading: isCreating }] = useCreateCancellationReasonMutation()
   const [updateReason, { isLoading: isSaving }] = useUpdateCancellationReasonMutation()
@@ -67,7 +80,7 @@ export default function AdminCancellationReasonsPage() {
 
   const handleDelete = async () => {
     if (!deleteTarget) return
-    await deleteReason(deleteTarget.id)
+    await deleteReason(String(deleteTarget.id))
     setDeleteTarget(null)
   }
 
@@ -76,8 +89,8 @@ export default function AdminCancellationReasonsPage() {
       <AdminTablePage<CancellationReason>
         title='İptal Nedenleri'
         idPrefix='cancellation-reasons'
-        rows={data?.data}
-        total={data?.total ?? 0}
+        rows={paginatedRows}
+        total={filteredRows.length}
         page={page}
         rowsPerPage={limit}
         isLoading={isLoading}
@@ -99,8 +112,27 @@ export default function AdminCancellationReasonsPage() {
         columns={[
           { header: 'ID', render: row => row.id },
           { header: 'Neden', render: row => row.reason_text || '-' },
-          { header: 'Tip', render: row => (row.app_type === 'owner_worker' ? 'İşletme/Çalışan' : 'Kullanıcı') },
-          { header: 'Durum', render: row => (row.is_active ? 'Aktif' : 'Pasif') }
+          {
+            header: 'Tip',
+            render: row => (
+              <Chip
+                size='small'
+                label={row.app_type === 'owner_worker' ? 'İşletme/Çalışan' : 'Kullanıcı'}
+                color={row.app_type === 'owner_worker' ? 'primary' : 'default'}
+                variant='outlined'
+              />
+            )
+          },
+          {
+            header: 'Durum',
+            render: row => (
+              <Chip
+                size='small'
+                label={row.is_active ? 'Aktif' : 'Pasif'}
+                color={row.is_active ? 'success' : 'default'}
+              />
+            )
+          }
         ]}
         actions={row => (
           <Stack direction='row' spacing={1} justifyContent='flex-end'>

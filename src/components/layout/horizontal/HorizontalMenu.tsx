@@ -3,8 +3,6 @@ import { useTheme } from '@mui/material/styles'
 
 // Type Imports
 import {
-  RiHomeSmileLine,
-  RiInformationLine,
   RiArrowRightSLine,
   RiCircleFill,
   RiDashboardLine,
@@ -103,14 +101,8 @@ const HorizontalMenu = () => {
           renderExpandedMenuItemIcon: { icon: <RiCircleFill /> }
         }}
       >
-        <MenuItem href='/home' icon={<RiHomeSmileLine />}>
-          {t('menu.home')}
-        </MenuItem>
-        <MenuItem href='/about' icon={<RiInformationLine />}>
-          {t('menu.about')}
-        </MenuItem>
         <SubMenu label={t('menu.adminPanel')} icon={<RiAdminLine />}>
-          <MenuItem href='/admin/dashboard' icon={<RiDashboardLine />}>
+          <MenuItem href='/dashboard' icon={<RiDashboardLine />}>
             {t('menu.adminDashboard')}
           </MenuItem>
           <MenuItem href='/admin/admins' icon={<RiShieldUserLine />}>

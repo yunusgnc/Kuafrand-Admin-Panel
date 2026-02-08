@@ -12,14 +12,9 @@ const useHorizontalMenuData = (): HorizontalMenuDataType[] => {
   return useMemo(
     () => [
       {
-        label: t('menu.home'),
-        href: '/home',
-        icon: 'ri-home-smile-line'
-      },
-      {
-        label: t('menu.about'),
-        href: '/about',
-        icon: 'ri-information-line'
+        label: t('menu.adminDashboard'),
+        href: '/dashboard',
+        icon: 'ri-dashboard-line'
       }
     ],
     [t]

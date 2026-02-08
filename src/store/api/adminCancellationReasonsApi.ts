@@ -9,7 +9,7 @@ import type {
 } from '@/types/admin'
 
 const normalizeCancellationReasons = (response: unknown): PaginatedResponse<CancellationReason> => {
-  return normalizePaginated<CancellationReason>(response, ['cancellation_reasons', 'cancellationReasons', 'data'])
+  return normalizePaginated<CancellationReason>(response, ['reasons', 'cancellation_reasons', 'cancellationReasons', 'data'])
 }
 
 export const adminCancellationReasonsApi = adminApi.injectEndpoints({

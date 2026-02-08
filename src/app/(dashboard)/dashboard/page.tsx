@@ -34,7 +34,7 @@ const statCards = [
   { key: 'total_industries', label: 'Toplam Sektör', icon: <RiBriefcase4Line size={28} />, color: '#1ABC9C' }
 ]
 
-export default function AdminDashboardPage() {
+export default function DashboardPage() {
   const { data: dashboard, isLoading } = useGetDashboardQuery()
   const { data: stats } = useGetSystemStatsQuery()
 
