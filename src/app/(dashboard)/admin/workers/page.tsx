@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Box,
   Typography,
@@ -29,6 +30,7 @@ import {
   MenuItem
 } from '@mui/material'
 import { RiSearchLine, RiEditLine, RiDeleteBinLine } from 'react-icons/ri'
+
 import { useI18n } from '@/hooks/useI18n'
 import { useGetWorkersQuery, useUpdateWorkerMutation, useDeleteWorkerMutation } from '@/store/api/adminApi'
 import type { Worker, UpdateWorkerRequest } from '@/types/admin'
@@ -61,6 +63,7 @@ export default function WorkersPage() {
 
   const handleEditOpen = (worker: Worker) => {
     const nameParts = worker.name.split(' ')
+
     setEditTarget(worker)
     setEditForm({
       id: worker.id,

@@ -16,12 +16,14 @@ import {
   TableRow,
   Typography
 } from '@mui/material'
+
 import { useGetFirebaseIdpsQuery } from '@/store/api/adminApi'
 
 function getProviderLabel(name: string): string {
   const parts = name.split('/')
   const last = parts[parts.length - 1] ?? ''
   const provider = last.replace(/\.(com|org|net)$/i, '').toLowerCase()
+
   const labels: Record<string, string> = {
     apple: 'Apple',
     google: 'Google',
@@ -32,7 +34,9 @@ function getProviderLabel(name: string): string {
     yahoo: 'Yahoo',
     linkedin: 'LinkedIn'
   }
-  return labels[provider] ?? provider.charAt(0).toUpperCase() + provider.slice(1)
+
+  
+return labels[provider] ?? provider.charAt(0).toUpperCase() + provider.slice(1)
 }
 
 export default function AdminFirebaseIdpPage() {

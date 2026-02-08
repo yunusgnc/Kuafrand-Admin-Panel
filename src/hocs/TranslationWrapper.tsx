@@ -1,6 +1,8 @@
 'use client'
 
-import React, { ComponentType, forwardRef } from 'react'
+import type { ComponentType} from 'react';
+import React, { forwardRef } from 'react'
+
 import { useI18n } from '@/hooks/useI18n'
 import type { I18nContextValue } from '@/utils/i18n'
 
@@ -17,7 +19,16 @@ export function withTranslation<P extends object>(Component: ComponentType<P & W
   return forwardRef<any, P>((props, ref) => {
     const { t, locale, direction, changeLocale } = useI18n()
 
-    return <Component {...props} ref={ref} t={t} locale={locale} direction={direction} changeLocale={changeLocale} />
+    return (
+      <Component
+        {...(props as P)}
+        ref={ref}
+        t={t}
+        locale={locale}
+        direction={direction}
+        changeLocale={changeLocale}
+      />
+    )
   })
 }
 
@@ -36,7 +47,7 @@ export function withT<P extends object>(Component: ComponentType<P & { t: I18nCo
   return forwardRef<any, P>((props, ref) => {
     const { t } = useI18n()
 
-    return <Component {...props} ref={ref} t={t} />
+    return <Component {...(props as P)} ref={ref} t={t} />
   })
 }
 
@@ -45,7 +56,7 @@ export function withLocale<P extends object>(Component: ComponentType<P & { loca
   return forwardRef<any, P>((props, ref) => {
     const { locale } = useI18n()
 
-    return <Component {...props} ref={ref} locale={locale} />
+    return <Component {...(props as P)} ref={ref} locale={locale} />
   })
 }
 
@@ -56,6 +67,6 @@ export function withDirection<P extends object>(
   return forwardRef<any, P>((props, ref) => {
     const { direction } = useI18n()
 
-    return <Component {...props} ref={ref} direction={direction} />
+    return <Component {...(props as P)} ref={ref} direction={direction} />
   })
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+
 import {
   Button,
   Chip,
@@ -14,6 +15,7 @@ import {
   TextField
 } from '@mui/material'
 import { RiAddLine, RiDeleteBinLine, RiEditLine } from 'react-icons/ri'
+
 import AdminTablePage from '@/components/admin/AdminTablePage'
 import type { CancellationReason, CreateCancellationReasonRequest, UpdateCancellationReasonRequest } from '@/types/admin'
 import {
@@ -29,11 +31,13 @@ export default function AdminCancellationReasonsPage() {
   const [search, setSearch] = useState('')
 
   const [createOpen, setCreateOpen] = useState(false)
+
   const [createForm, setCreateForm] = useState<CreateCancellationReasonRequest>({
     reason_text: '',
     app_type: 'user',
     is_active: true
   })
+
   const [editForm, setEditForm] = useState<UpdateCancellationReasonRequest | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<CancellationReason | null>(null)
 
@@ -41,9 +45,12 @@ export default function AdminCancellationReasonsPage() {
 
   const filteredRows = useMemo(() => {
     const list = data?.data ?? []
+
     if (!search.trim()) return list
     const q = search.toLowerCase()
-    return list.filter(
+
+    
+return list.filter(
       r =>
         (r.reason_text ?? '').toLowerCase().includes(q) ||
         (r.app_type ?? '').toLowerCase().includes(q)
@@ -52,7 +59,9 @@ export default function AdminCancellationReasonsPage() {
 
   const paginatedRows = useMemo(() => {
     const start = page * limit
-    return filteredRows.slice(start, start + limit)
+
+    
+return filteredRows.slice(start, start + limit)
   }, [filteredRows, page, limit])
 
   const [createReason, { isLoading: isCreating }] = useCreateCancellationReasonMutation()

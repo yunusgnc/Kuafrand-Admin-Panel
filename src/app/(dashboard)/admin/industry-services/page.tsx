@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Button,
   Dialog,
@@ -13,6 +14,7 @@ import {
   TextField
 } from '@mui/material'
 import { RiAddLine, RiDeleteBinLine } from 'react-icons/ri'
+
 import AdminTablePage from '@/components/admin/AdminTablePage'
 import type { IndustryService, CreateIndustryServiceRequest, Industry, Service } from '@/types/admin'
 import {
@@ -37,6 +39,7 @@ export default function AdminIndustryServicesPage() {
     page: 1,
     limit: 200
   })
+
   const { data: servicesData, isLoading: isServicesLoading } = useGetServicesQuery({
     page: 1,
     limit: 200
@@ -46,6 +49,7 @@ export default function AdminIndustryServicesPage() {
   const normalizedServiceId = serviceId.trim()
   const isValidIndustryId = normalizedIndustryId.length === 0 || /^\d+$/.test(normalizedIndustryId)
   const isValidServiceId = normalizedServiceId.length === 0 || /^\d+$/.test(normalizedServiceId)
+
   const { data, isLoading } = useGetIndustryServicesQuery(
     {
       page: page + 1,
@@ -159,6 +163,7 @@ export default function AdminIndustryServicesPage() {
                 if (isValidIndustryId && normalizedIndustryId) {
                   setCreateForm(prev => ({ ...prev, industry_id: normalizedIndustryId }))
                 }
+
                 setCreateOpen(true)
               }}
             >

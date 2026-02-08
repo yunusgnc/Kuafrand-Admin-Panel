@@ -55,7 +55,9 @@ const toWorker = (item: WorkerApi): Worker => {
 
 const normalizeWorkers = (response: unknown): PaginatedResponse<Worker> => {
   const normalized = normalizePaginated<WorkerApi>(response, 'workers')
-  return {
+
+  
+return {
     data: normalized.data.map(toWorker),
     total: normalized.total
   }

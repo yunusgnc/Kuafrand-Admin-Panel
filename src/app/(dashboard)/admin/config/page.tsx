@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Box,
   Button,
@@ -23,26 +24,32 @@ import {
   Skeleton
 } from '@mui/material'
 import { RiEditLine } from 'react-icons/ri'
+
 import type { ConfigItem, ConfigValue } from '@/types/admin'
 import { useGetConfigQuery, useUpdateConfigMutation } from '@/store/api/adminApi'
 
 function formatValue(val: ConfigValue): string {
   if (val === null || val === undefined) return '-'
   if (typeof val === 'boolean') return val ? 'Evet' : 'Hayır'
-  return String(val)
+  
+return String(val)
 }
 
-function parseValue(str: string, current?: ConfigValue): ConfigValue {
+function parseValue(str: string): ConfigValue {
   if (str === '' || str === 'null') return null
   const lower = str.toLowerCase()
+
   if (lower === 'true' || lower === 'false') return lower === 'true'
   const n = Number(str)
+
   if (Number.isFinite(n)) return n
-  return str
+  
+return str
 }
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return '-'
+
   try {
     return new Date(dateStr).toLocaleString('tr-TR')
   } catch {
@@ -53,7 +60,9 @@ function formatDate(dateStr?: string) {
 function isBooleanLike(val: ConfigValue): boolean {
   if (typeof val === 'boolean') return true
   const s = String(val ?? '').toLowerCase()
-  return s === 'true' || s === 'false' || s === '1' || s === '0'
+
+  
+return s === 'true' || s === 'false' || s === '1' || s === '0'
 }
 
 export default function ConfigPage() {
@@ -70,7 +79,8 @@ export default function ConfigPage() {
 
   const handleSave = async () => {
     if (!editItem) return
-    const value = parseValue(editValue, editItem.value)
+    const value = parseValue(editValue)
+
     await updateConfig({ key: editItem.key, value })
     setEditItem(null)
   }
@@ -187,7 +197,7 @@ export default function ConfigPage() {
               onChange={e => setEditValue(e.target.value)}
               fullWidth
               placeholder={
-                isBooleanLike(editItem?.value) ? 'true veya false' : 'Değer girin'
+                isBooleanLike(editItem?.value ?? null) ? 'true veya false' : 'Değer girin'
               }
             />
           </Stack>

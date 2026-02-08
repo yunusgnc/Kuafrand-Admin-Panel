@@ -3,18 +3,24 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 // API functions
 const fetchUsers = async () => {
   const response = await fetch('/api/users')
+
   if (!response.ok) {
     throw new Error('Network response was not ok')
   }
-  return response.json()
+
+  
+return response.json()
 }
 
 const fetchUser = async (id: string) => {
   const response = await fetch(`/api/users/${id}`)
+
   if (!response.ok) {
     throw new Error('Network response was not ok')
   }
-  return response.json()
+
+  
+return response.json()
 }
 
 const createUser = async (userData: any) => {
@@ -25,10 +31,13 @@ const createUser = async (userData: any) => {
     },
     body: JSON.stringify(userData)
   })
+
   if (!response.ok) {
     throw new Error('Network response was not ok')
   }
-  return response.json()
+
+  
+return response.json()
 }
 
 const updateUser = async ({ id, userData }: { id: string; userData: any }) => {
@@ -39,20 +48,26 @@ const updateUser = async ({ id, userData }: { id: string; userData: any }) => {
     },
     body: JSON.stringify(userData)
   })
+
   if (!response.ok) {
     throw new Error('Network response was not ok')
   }
-  return response.json()
+
+  
+return response.json()
 }
 
 const deleteUser = async (id: string) => {
   const response = await fetch(`/api/users/${id}`, {
     method: 'DELETE'
   })
+
   if (!response.ok) {
     throw new Error('Network response was not ok')
   }
-  return response.json()
+
+  
+return response.json()
 }
 
 // Query hooks
@@ -93,6 +108,7 @@ export const useUpdateUser = () => {
     onSuccess: (data, variables) => {
       // Update the user in cache
       queryClient.setQueryData(['user', variables.id], data)
+
       // Invalidate users list
       queryClient.invalidateQueries({ queryKey: ['users'] })
     }
@@ -107,6 +123,7 @@ export const useDeleteUser = () => {
     onSuccess: (_, id) => {
       // Remove user from cache
       queryClient.removeQueries({ queryKey: ['user', id] })
+
       // Invalidate users list
       queryClient.invalidateQueries({ queryKey: ['users'] })
     }

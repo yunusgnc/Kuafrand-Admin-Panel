@@ -398,7 +398,7 @@ const Customizer = ({ breakpoint = 'lg', dir = 'ltr', disableDirection = false }
                         [styles.active]: settings.contentWidth === 'compact'
                       })}
                       onClick={() =>
-                        updateSettings({
+                        settings.updateSettings({
                           navbarContentWidth: 'compact',
                           contentWidth: 'compact',
                           footerContentWidth: 'compact'
@@ -410,7 +410,7 @@ const Customizer = ({ breakpoint = 'lg', dir = 'ltr', disableDirection = false }
                     <p
                       className={styles.itemLabel}
                       onClick={() =>
-                        updateSettings({
+                        settings.updateSettings({
                           navbarContentWidth: 'compact',
                           contentWidth: 'compact',
                           footerContentWidth: 'compact'
@@ -424,7 +424,7 @@ const Customizer = ({ breakpoint = 'lg', dir = 'ltr', disableDirection = false }
                     <div
                       className={classnames(styles.itemWrapper, { [styles.active]: settings.contentWidth === 'wide' })}
                       onClick={() =>
-                        updateSettings({ navbarContentWidth: 'wide', contentWidth: 'wide', footerContentWidth: 'wide' })
+                        settings.updateSettings({ navbarContentWidth: 'wide', contentWidth: 'wide', footerContentWidth: 'wide' })
                       }
                     >
                       <ContentWide />
@@ -432,7 +432,7 @@ const Customizer = ({ breakpoint = 'lg', dir = 'ltr', disableDirection = false }
                     <p
                       className={styles.itemLabel}
                       onClick={() =>
-                        updateSettings({ navbarContentWidth: 'wide', contentWidth: 'wide', footerContentWidth: 'wide' })
+                        settings.updateSettings({ navbarContentWidth: 'wide', contentWidth: 'wide', footerContentWidth: 'wide' })
                       }
                     >
                       Wide

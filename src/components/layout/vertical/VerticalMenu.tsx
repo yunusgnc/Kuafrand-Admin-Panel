@@ -5,22 +5,6 @@ import { useTheme } from '@mui/material/styles'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Type Imports
-import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
-
-// Component Imports
-import { Menu, MenuItem } from '@menu/vertical-menu'
-
-// Hook Imports
-import useVerticalNav from '@menu/hooks/useVerticalNav'
-import { useI18n } from '@/hooks/useI18n'
-
-// Styled Component Imports
-import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNavExpandIcon'
-
-// Style Imports
-import menuItemStyles from '@core/styles/vertical/menuItemStyles'
-
-// Icon Imports
 import {
   RiArrowRightSLine,
   RiCircleFill,
@@ -44,6 +28,23 @@ import {
   RiVipCrown2Line,
   RiSettings3Line
 } from 'react-icons/ri'
+
+import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
+
+// Component Imports
+import { Menu, MenuItem } from '@menu/vertical-menu'
+
+// Hook Imports
+import useVerticalNav from '@menu/hooks/useVerticalNav'
+import { useI18n } from '@/hooks/useI18n'
+
+// Styled Component Imports
+import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNavExpandIcon'
+
+// Style Imports
+import menuItemStyles from '@core/styles/vertical/menuItemStyles'
+
+// Icon Imports
 
 type RenderExpandIconProps = {
   open?: boolean

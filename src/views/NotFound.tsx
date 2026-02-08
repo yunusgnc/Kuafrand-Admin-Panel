@@ -1,8 +1,10 @@
 'use client'
 
-import { useI18n } from '@/hooks/useI18n'
-import { Box, Typography, Button } from '@mui/material'
 import { useRouter } from 'next/navigation'
+
+import { Box, Typography, Button } from '@mui/material'
+
+import { useI18n } from '@/hooks/useI18n'
 
 const NotFound = () => {
   const { t } = useI18n()

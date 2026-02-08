@@ -1,7 +1,8 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
+
 import type { AdminUser } from '@/types/admin'
-import { adminApi } from '@/store/api/adminApi'
+import { adminAuthApi } from '@/store/api/adminAuthApi'
 
 interface AuthState {
   user: AdminUser | null
@@ -14,7 +15,9 @@ interface AuthState {
 const getStoredUser = (): AdminUser | null => {
   if (typeof window === 'undefined') return null
   const raw = localStorage.getItem('admin_user')
+
   if (!raw) return null
+
   try {
     return JSON.parse(raw)
   } catch {
@@ -41,6 +44,7 @@ const authSlice = createSlice({
       state.token = action.payload.token
       state.isAuthenticated = true
       state.error = null
+
       if (typeof window !== 'undefined') {
         localStorage.setItem('admin_token', action.payload.token)
         localStorage.setItem('admin_user', JSON.stringify(action.payload.admin))
@@ -51,6 +55,7 @@ const authSlice = createSlice({
       state.token = null
       state.isAuthenticated = false
       state.error = null
+
       if (typeof window !== 'undefined') {
         localStorage.removeItem('admin_token')
         localStorage.removeItem('admin_user')
@@ -68,22 +73,23 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addMatcher(adminApi.endpoints.adminLogin.matchPending, state => {
+      .addMatcher(adminAuthApi.endpoints.adminLogin.matchPending, state => {
         state.isLoading = true
         state.error = null
       })
-      .addMatcher(adminApi.endpoints.adminLogin.matchFulfilled, (state, action) => {
+      .addMatcher(adminAuthApi.endpoints.adminLogin.matchFulfilled, (state, action) => {
         state.isLoading = false
         state.user = action.payload.admin
         state.token = action.payload.token
         state.isAuthenticated = true
         state.error = null
+
         if (typeof window !== 'undefined') {
           localStorage.setItem('admin_token', action.payload.token)
           localStorage.setItem('admin_user', JSON.stringify(action.payload.admin))
         }
       })
-      .addMatcher(adminApi.endpoints.adminLogin.matchRejected, (state, action) => {
+      .addMatcher(adminAuthApi.endpoints.adminLogin.matchRejected, (state, action) => {
         state.isLoading = false
         state.error = action.error?.message || 'Login failed'
       })

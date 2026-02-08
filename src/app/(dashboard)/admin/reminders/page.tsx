@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Button,
   Dialog,
@@ -12,6 +13,7 @@ import {
   TextField
 } from '@mui/material'
 import { RiAddLine, RiDeleteBinLine, RiEditLine } from 'react-icons/ri'
+
 import AdminTablePage from '@/components/admin/AdminTablePage'
 import type { Reminder, CreateReminderRequest, UpdateReminderRequest } from '@/types/admin'
 import {
@@ -27,12 +29,14 @@ export default function AdminRemindersPage() {
   const [search, setSearch] = useState('')
 
   const [createOpen, setCreateOpen] = useState(false)
+
   const [createForm, setCreateForm] = useState<CreateReminderRequest>({
     appointment_id: '',
     message: '',
     send_at: '',
     type: ''
   })
+
   const [editForm, setEditForm] = useState<UpdateReminderRequest | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Reminder | null>(null)
 

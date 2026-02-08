@@ -33,7 +33,9 @@ const toIndustry = (item: IndustryApi): Industry => {
 
 const normalizeIndustries = (response: unknown): PaginatedResponse<Industry> => {
   const normalized = normalizePaginated<IndustryApi>(response, ['industries', 'industry'])
-  return {
+
+  
+return {
     data: normalized.data.map(toIndustry),
     total: normalized.total
   }

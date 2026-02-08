@@ -21,7 +21,9 @@ const toService = (item: ServiceApi): Service => ({
 
 const normalizeServices = (response: unknown): PaginatedResponse<Service> => {
   const normalized = normalizePaginated<ServiceApi>(response, 'services')
-  return {
+
+  
+return {
     data: normalized.data.map(toService),
     total: normalized.total
   }

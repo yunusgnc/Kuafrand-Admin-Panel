@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Box,
   Typography,
@@ -30,6 +31,7 @@ import {
   Switch
 } from '@mui/material'
 import { RiArrowDownSLine, RiAddLine, RiEditLine } from 'react-icons/ri'
+
 import { useI18n } from '@/hooks/useI18n'
 import {
   useGetRolesQuery,
@@ -45,9 +47,7 @@ import type {
   Role,
   Permission,
   CreateRoleRequest,
-  UpdateRoleRequest,
-  CreatePermissionRequest,
-  UpdatePermissionRequest
+  CreatePermissionRequest
 } from '@/types/admin'
 
 export default function RolesPage() {
@@ -58,6 +58,7 @@ export default function RolesPage() {
 
   const [createRoleOpen, setCreateRoleOpen] = useState(false)
   const [editRole, setEditRole] = useState<Role | null>(null)
+
   const [createForm, setCreateForm] = useState<CreateRoleRequest>({
     display_name: '',
     description: '',
@@ -66,6 +67,7 @@ export default function RolesPage() {
 
   const [createPermOpen, setCreatePermOpen] = useState(false)
   const [editPerm, setEditPerm] = useState<Permission | null>(null)
+
   const [createPermForm, setCreatePermForm] = useState<CreatePermissionRequest>({
     name: '',
     display_name: '',
@@ -76,9 +78,11 @@ export default function RolesPage() {
 
   const { data: roles, isLoading: rolesLoading } = useGetRolesQuery()
   const { data: allPermissions, isLoading: permsLoading } = useGetPermissionsQuery()
+
   const { data: roleDetail, isFetching: detailFetching } = useGetRoleDetailQuery(selectedRoleId!, {
     skip: !selectedRoleId
   })
+
   const [updateRolePermissions, { isLoading: isSaving }] = useUpdateRolePermissionsMutation()
   const [createRole, { isLoading: isCreatingRole }] = useCreateRoleMutation()
   const [updateRole, { isLoading: isUpdatingRole }] = useUpdateRoleMutation()
@@ -95,6 +99,7 @@ export default function RolesPage() {
       setSelectedPermissions(roleDetail.permissions.map(p => p.name))
       setDirty(true)
     }
+
     setSelectedPermissions(prev =>
       prev.includes(permName) ? prev.filter(p => p !== permName) : [...prev, permName]
     )
@@ -161,9 +166,11 @@ export default function RolesPage() {
   const permissionGroups = allPermissions?.reduce(
     (acc, perm) => {
       const group = perm.group || perm.category || 'other'
+
       if (!acc[group]) acc[group] = []
       acc[group].push(perm)
-      return acc
+      
+return acc
     },
     {} as Record<string, Permission[]>
   )

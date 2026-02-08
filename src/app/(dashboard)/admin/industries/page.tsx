@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Button,
   Dialog,
@@ -12,6 +13,7 @@ import {
   TextField
 } from '@mui/material'
 import { RiAddLine, RiDeleteBinLine, RiEditLine } from 'react-icons/ri'
+
 import AdminTablePage from '@/components/admin/AdminTablePage'
 import type { Industry, CreateIndustryRequest, UpdateIndustryRequest } from '@/types/admin'
 import {

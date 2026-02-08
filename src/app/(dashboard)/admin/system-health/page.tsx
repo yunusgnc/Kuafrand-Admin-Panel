@@ -25,6 +25,7 @@ import {
   RiCheckboxCircleLine,
   RiErrorWarningLine
 } from 'react-icons/ri'
+
 import { useGetSystemHealthQuery } from '@/store/api/adminApi'
 
 interface SystemHealthResponse {
@@ -68,7 +69,8 @@ interface SystemHealthResponse {
 
 function StatusChip({ ok }: { ok?: boolean }) {
   if (ok === undefined) return <Chip size='small' label='-' variant='outlined' />
-  return (
+  
+return (
     <Chip
       size='small'
       icon={ok ? <RiCheckboxCircleLine size={14} /> : <RiErrorWarningLine size={14} />}
@@ -84,14 +86,17 @@ function formatUptime(seconds?: number) {
   const h = Math.floor((seconds % 86400) / 3600)
   const m = Math.floor((seconds % 3600) / 60)
   const parts: string[] = []
+
   if (d > 0) parts.push(`${d}g`)
   if (h > 0) parts.push(`${h}s`)
   parts.push(`${m}dk`)
-  return parts.join(' ')
+  
+return parts.join(' ')
 }
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return '-'
+
   try {
     return new Date(dateStr).toLocaleString('tr-TR')
   } catch {

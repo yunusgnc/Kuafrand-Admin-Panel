@@ -1,10 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
+
+import { Button, Menu, MenuItem, ListItemIcon, ListItemText, Typography, Box, Tooltip } from '@mui/material'
+
+import { RiTranslate2 } from 'react-icons/ri'
+
 import { useI18n } from '@/hooks/useI18n'
 import { SUPPORTED_LOCALES, type SupportedLocale } from '@/configs/i18n'
-import { Button, Menu, MenuItem, ListItemIcon, ListItemText, Typography, Box, Tooltip } from '@mui/material'
-import { RiTranslate2 } from 'react-icons/ri'
 
 interface LanguageSwitcherProps {
   variant?: 'button' | 'menu' | 'dropdown'

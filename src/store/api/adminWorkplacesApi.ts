@@ -27,7 +27,9 @@ const toWorkplace = (item: WorkplaceApi): Workplace => ({
 
 const normalizeWorkplaces = (response: unknown): PaginatedResponse<Workplace> => {
   const normalized = normalizePaginated<WorkplaceApi>(response, 'workplaces')
-  return {
+
+  
+return {
     data: normalized.data.map(toWorkplace),
     total: normalized.total
   }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import AdminTablePage from '@/components/admin/AdminTablePage'
 import type { Appointment } from '@/types/admin'
 import { useGetAppointmentsQuery } from '@/store/api/adminApi'
@@ -8,23 +9,31 @@ import { useGetAppointmentsQuery } from '@/store/api/adminApi'
 const getDisplayValue = (value: unknown): string => {
   if (typeof value === 'string' && value.trim().length > 0) return value
   if (typeof value === 'number') return String(value)
+
   if (value && typeof value === 'object') {
     const record = value as Record<string, unknown>
+
     for (const key of ['full_name', 'name', 'title', 'email']) {
       const nested = record[key]
+
       if (typeof nested === 'string' && nested.trim().length > 0) return nested
     }
   }
-  return ''
+
+  
+return ''
 }
 
 const getField = (row: Appointment, keys: string[]): string => {
   for (const key of keys) {
     const value = (row as Record<string, unknown>)[key]
     const display = getDisplayValue(value)
+
     if (display) return display
   }
-  return '-'
+
+  
+return '-'
 }
 
 export default function AdminAppointmentsPage() {

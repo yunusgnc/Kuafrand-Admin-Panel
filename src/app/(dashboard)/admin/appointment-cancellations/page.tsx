@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+
 import {
   Button,
   Dialog,
@@ -12,6 +13,7 @@ import {
   TextField
 } from '@mui/material'
 import { RiDeleteBinLine, RiEditLine } from 'react-icons/ri'
+
 import AdminTablePage from '@/components/admin/AdminTablePage'
 import type { AppointmentCancellation, UpdateAppointmentCancellationRequest } from '@/types/admin'
 import {
@@ -73,7 +75,7 @@ export default function AdminAppointmentCancellationsPage() {
           { header: 'ID', render: row => row.id },
           { header: 'Randevu ID', render: row => row.appointment_id || '-' },
           { header: 'Neden ID', render: row => row.reason_id || '-' },
-          { header: 'Durum', render: row => (row as Record<string, unknown>).status ?? '-' }
+          { header: 'Durum', render: row => String((row as Record<string, unknown>).status ?? '-') }
         ]}
         actions={row => (
           <Stack direction='row' spacing={1} justifyContent='flex-end'>

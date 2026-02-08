@@ -4,13 +4,17 @@ import type { FirebaseIdpResponse } from '@/types/admin'
 const normalizeFirebaseIdpResponse = (response: unknown): FirebaseIdpResponse => {
   if (response && typeof response === 'object') {
     const record = response as Record<string, unknown>
-    return {
+
+    
+return {
       message: (record.message as string) ?? '',
       idpConfigs: (record.idpConfigs as FirebaseIdpResponse['idpConfigs']) ?? [],
       supportedProviders: (record.supportedProviders as FirebaseIdpResponse['supportedProviders']) ?? {}
     }
   }
-  return { message: '', idpConfigs: [], supportedProviders: {} }
+
+  
+return { message: '', idpConfigs: [], supportedProviders: {} }
 }
 
 export const adminFirebaseIdpApi = adminApi.injectEndpoints({

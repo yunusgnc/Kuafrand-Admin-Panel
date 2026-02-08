@@ -35,6 +35,7 @@ const normalizeDashboard = (response: unknown): DashboardData => {
   }
 
   const res = response as DashboardApi
+
   const recent = Array.isArray(res.recent_registrations)
     ? res.recent_registrations.map(
         (item): RecentRegistration => ({

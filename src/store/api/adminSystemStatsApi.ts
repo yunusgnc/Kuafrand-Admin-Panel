@@ -37,6 +37,7 @@ const normalizeSystemStats = (response: unknown): SystemStats => {
   }
 
   const res = response as SystemStatsApi
+
   const monthly = Array.isArray(res.monthly_growth)
     ? res.monthly_growth.map(item => ({
         month: item.month,

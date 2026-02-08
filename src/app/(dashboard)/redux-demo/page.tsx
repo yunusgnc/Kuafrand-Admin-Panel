@@ -1,10 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useSettings } from '@/hooks/useSettings'
-import { useI18n } from '@/hooks/useI18n'
-import { useNotifications } from '@/hooks/useNotifications'
-import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/useUsers'
+
 import {
   Box,
   Card,
@@ -21,7 +18,13 @@ import {
   Alert,
   AlertTitle
 } from '@mui/material'
-import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon } from '@mui/icons-material'
+
+import { RiDeleteBinLine, RiEditLine, RiAddLine } from 'react-icons/ri'
+
+import { useSettings } from '@/hooks/useSettings'
+import { useI18n } from '@/hooks/useI18n'
+import { useNotifications } from '@/hooks/useNotifications'
+import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from '@/hooks/useUsers'
 
 const ReduxDemoPage = () => {
   // Redux hooks
@@ -137,7 +140,7 @@ const ReduxDemoPage = () => {
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button size='small' onClick={handleAddNotification} startIcon={<AddIcon />}>
+                <Button size='small' onClick={handleAddNotification} startIcon={<RiAddLine size={18} />}>
                   Add Notification
                 </Button>
                 <Button size='small' onClick={markAllAsRead}>
@@ -175,7 +178,7 @@ const ReduxDemoPage = () => {
                       size='small'
                       onClick={handleCreateUser}
                       disabled={createUserMutation.isPending}
-                      startIcon={<AddIcon />}
+                      startIcon={<RiAddLine size={18} />}
                     >
                       {createUserMutation.isPending ? 'Creating...' : 'Add User'}
                     </Button>
@@ -191,14 +194,14 @@ const ReduxDemoPage = () => {
                             onClick={() => handleUpdateUser(user.id)}
                             disabled={updateUserMutation.isPending}
                           >
-                            <EditIcon />
+                            <RiEditLine size={18} />
                           </IconButton>
                           <IconButton
                             edge='end'
                             onClick={() => handleDeleteUser(user.id)}
                             disabled={deleteUserMutation.isPending}
                           >
-                            <DeleteIcon />
+                            <RiDeleteBinLine size={18} />
                           </IconButton>
                         </ListItemSecondaryAction>
                       </ListItem>
