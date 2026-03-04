@@ -1,6 +1,6 @@
-# Materialize - Material Next.js Admin Template
+# Kuafrand Panel - Kuaför Randevu Yönetim Sistemi
 
-Materialize is a premium Material-UI Next.js admin template that provides a comprehensive solution for building modern web applications.
+Kuafrand Panel, kuaför randevu yönetimi için Material-UI Next.js tabanlı admin panelidir.
 
 ## 🌟 Features
 
@@ -90,7 +90,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 
    ```bash
    git clone <repository-url>
-   cd materialize-admin-v13.7.0/next-version/typescript-version/starter-kit
+   cd kuafrand-panel
    ```
 
 2. **Install dependencies**
@@ -210,4 +210,4 @@ Stay updated with the latest features and improvements by:
 
 ---
 
-Built with ❤️ using Next.js, React, and Material-UI
+Kuafrand Panel - Built with ❤️ using Next.js, React, and Material-UI

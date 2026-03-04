@@ -24,8 +24,8 @@ import Providers from '@/components/Providers'
 import { DEFAULT_LOCALE, getDirection, isValidLocale } from '@/configs/i18n'
 
 export const metadata = {
-  title: 'Materialize - Material Next.js Admin Template',
-  description: 'Materialize - Material Next.js Admin Template'
+  title: 'Kuafrand Panel - Kuaför Randevu Yönetim Sistemi',
+  description: 'Kuafrand Panel - Kuaför Randevu Yönetim Sistemi'
 }
 
 const RootLayout = async (props: ChildrenType) => {

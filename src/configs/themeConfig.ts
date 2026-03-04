@@ -50,9 +50,9 @@ export type Config = {
 }
 
 const themeConfig: Config = {
-  templateName: 'Materialize',
+  templateName: 'Kuafrand Panel',
   homePageUrl: '/dashboard',
-  settingsCookieName: 'materialize-mui-next-demo-1',
+  settingsCookieName: 'kuafrand-panel-settings',
   mode: 'system', // 'system', 'light', 'dark'
   skin: 'default', // 'default', 'bordered'
   semiDark: false, // true, false
