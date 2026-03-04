@@ -40,7 +40,8 @@ return d.toLocaleDateString('tr-TR')
 const STATUS_COLORS: Record<string, 'success' | 'error' | 'warning' | 'default'> = {
   active: 'success',
   expired: 'error',
-  cancelled: 'error',
+  canceled: 'error',
+  revoked: 'error',
   trialing: 'warning'
 }
 
@@ -155,7 +156,8 @@ export default function SubscriptionsPage() {
               <MenuItem value=''>Tümü</MenuItem>
               <MenuItem value='active'>Aktif</MenuItem>
               <MenuItem value='expired'>Süresi Dolmuş</MenuItem>
-              <MenuItem value='cancelled'>İptal</MenuItem>
+              <MenuItem value='canceled'>İptal</MenuItem>
+              <MenuItem value='revoked'>İptal Edilmiş</MenuItem>
               <MenuItem value='trialing'>Deneme</MenuItem>
             </Select>
           </FormControl>
@@ -175,7 +177,8 @@ export default function SubscriptionsPage() {
               >
                 <MenuItem value='active'>Aktif</MenuItem>
                 <MenuItem value='expired'>Süresi Dolmuş</MenuItem>
-                <MenuItem value='cancelled'>İptal</MenuItem>
+                <MenuItem value='canceled'>İptal</MenuItem>
+                <MenuItem value='revoked'>İptal Edilmiş</MenuItem>
                 <MenuItem value='trialing'>Deneme</MenuItem>
               </Select>
             </FormControl>
