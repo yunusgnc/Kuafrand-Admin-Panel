@@ -552,6 +552,38 @@ export interface UpdateSubscriptionRequest {
   product_id?: string
 }
 
+/** Super admin: tek seferde owner + workplace + trial abonelik oluşturma */
+export interface TrialProvisionRequest {
+  owner_first_name: string
+  owner_last_name: string
+  owner_username: string
+  owner_password: string
+  owner_phone_number?: string
+  owner_email?: string
+  workplace_title: string
+  workplace_address?: string
+  workplace_city_id: number
+  workplace_district_id: number
+  workplace_gender_type?: 'male' | 'female' | 'unisex' | 'mixed'
+  workplace_phone?: string
+  workplace_email?: string
+  workplace_website?: string
+  workplace_industry_type_id?: number
+  workplace_company_type?: string
+  trial_days?: number
+  trial_expires_at?: string
+  product_id?: string
+  platform?: 'ios' | 'android'
+}
+
+export interface TrialProvisionResponse {
+  message: string
+  trial_ends_at: string
+  owner: Record<string, unknown>
+  workplace: Record<string, unknown>
+  subscription: Record<string, unknown>
+}
+
 export type ConfigValue = string | number | boolean | null
 
 export interface ConfigItem {

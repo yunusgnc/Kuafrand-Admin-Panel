@@ -26,7 +26,8 @@ import {
   RiFileSearchLine,
   RiPulseLine,
   RiVipCrown2Line,
-  RiSettings3Line
+  RiSettings3Line,
+  RiGiftLine
 } from 'react-icons/ri'
 
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
@@ -102,6 +103,9 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         </MenuItem>
         <MenuItem href='/admin/subscriptions' icon={<RiVipCrown2Line />}>
           {t('menu.subscriptions')}
+        </MenuItem>
+        <MenuItem href='/admin/trials' icon={<RiGiftLine />}>
+          {t('menu.trialProvision')}
         </MenuItem>
         <MenuItem href='/admin/config' icon={<RiSettings3Line />}>
           {t('menu.config')}

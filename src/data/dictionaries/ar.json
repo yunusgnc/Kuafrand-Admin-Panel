@@ -122,7 +122,8 @@
     "users": "المستخدمون",
     "workplaces": "أماكن العمل",
     "workers": "العمال",
-    "roles": "الأدوار والصلاحيات"
+    "roles": "الأدوار والصلاحيات",
+    "trialProvision": "فتح تجريبي"
   },
   "admin": {
     "dashboard": {

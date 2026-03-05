@@ -122,7 +122,8 @@
     "users": "Users",
     "workplaces": "Workplaces",
     "workers": "Workers",
-    "roles": "Roles & Permissions"
+    "roles": "Roles & Permissions",
+    "trialProvision": "Provision Trial"
   },
   "admin": {
     "dashboard": {
