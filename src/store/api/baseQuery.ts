@@ -2,7 +2,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import type { RootState } from '@/store'
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || ''
+const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL || '').replace(/\/$/, '')
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
