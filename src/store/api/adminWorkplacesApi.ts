@@ -1,6 +1,13 @@
 import { adminApi } from './adminApiBase'
 import { coerceBoolean, normalizePaginated } from './adminApiUtils'
-import type { PaginatedResponse, Workplace, WorkplaceListParams, UpdateWorkplaceRequest, CreateWorkplaceRequest } from '@/types/admin'
+import type {
+  PaginatedResponse,
+  Workplace,
+  WorkplaceListParams,
+  UpdateWorkplaceRequest,
+  CreateWorkplaceRequest,
+  ManualSubscriptionRequest
+} from '@/types/admin'
 
 type WorkplaceApi = {
   id: string
@@ -76,6 +83,20 @@ export const adminWorkplacesApi = adminApi.injectEndpoints({
         body
       }),
       invalidatesTags: [{ type: 'Workplaces', id: 'LIST' }]
+    }),
+
+    /** Elden ödeme aboneliği tanımlar/uzatır (mağaza satırına dokunmaz). */
+    grantManualSubscription: builder.mutation<unknown, ManualSubscriptionRequest>({
+      query: ({ id, ...body }) => ({
+        url: `/api/admin/workplaces/${id}/manual-subscription`,
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Workplaces', id },
+        { type: 'Workplaces', id: 'LIST' },
+        { type: 'Subscriptions', id: 'LIST' }
+      ]
     })
   }),
   overrideExisting: false
@@ -86,5 +107,6 @@ export const {
   useLazyGetWorkplacesQuery,
   useUpdateWorkplaceMutation,
   useDeleteWorkplaceMutation,
-  useCreateWorkplaceMutation
+  useCreateWorkplaceMutation,
+  useGrantManualSubscriptionMutation
 } = adminWorkplacesApi

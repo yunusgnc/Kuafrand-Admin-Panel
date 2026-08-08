@@ -26,16 +26,19 @@ import {
   DialogActions,
   Button,
   IconButton,
-  MenuItem
+  MenuItem,
+  Tooltip,
+  Alert
 } from '@mui/material'
-import { RiSearchLine, RiDeleteBinLine, RiEditLine } from 'react-icons/ri'
+import { RiSearchLine, RiDeleteBinLine, RiEditLine, RiHandCoinLine } from 'react-icons/ri'
 
 import { useI18n } from '@/hooks/useI18n'
 import { useAppSelector } from '@/store/hooks'
 import {
   useGetWorkplacesQuery,
   useUpdateWorkplaceMutation,
-  useDeleteWorkplaceMutation
+  useDeleteWorkplaceMutation,
+  useGrantManualSubscriptionMutation
 } from '@/store/api/adminApi'
 import type { Workplace, UpdateWorkplaceRequest } from '@/types/admin'
 
@@ -49,6 +52,13 @@ export default function WorkplacesPage() {
   const [search, setSearch] = useState('')
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
   const [editForm, setEditForm] = useState<UpdateWorkplaceRequest | null>(null)
+  const [manualForm, setManualForm] = useState<{
+    id: string
+    name: string
+    date: string
+    note: string
+  } | null>(null)
+  const [manualError, setManualError] = useState<string | null>(null)
   const searchInputId = 'workplaces-search'
   const rowsPerPageLabelId = 'workplaces-rows-per-page-label'
   const rowsPerPageSelectId = 'workplaces-rows-per-page'
@@ -61,9 +71,47 @@ export default function WorkplacesPage() {
 
   const [updateWorkplace, { isLoading: isSaving }] = useUpdateWorkplaceMutation()
   const [deleteWorkplace, { isLoading: isDeleting }] = useDeleteWorkplaceMutation()
+  const [grantManualSubscription, { isLoading: isGranting }] = useGrantManualSubscriptionMutation()
 
   const handleToggleActive = (id: string, currentStatus: boolean) => {
     updateWorkplace({ id, is_active: !currentStatus })
+  }
+
+  // ── Elden ödeme ───────────────────────────────────────────────────────────
+  // Bu anahtar (yukarıdaki Switch) yalnızca workplaces.is_active alanını yazar;
+  // erişim aboneliklerden türetildiği için gece senkronu geri alır ve randevu
+  // uçları yine kapalı kalır. Nakit tahsilat için tek kalıcı yol budur.
+  const handleManualOpen = (workplace: Workplace) => {
+    const oneMonthLater = new Date()
+
+    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1)
+
+    setManualForm({
+      id: workplace.id,
+      name: workplace.name,
+      date: oneMonthLater.toISOString().slice(0, 10),
+      note: ''
+    })
+    setManualError(null)
+  }
+
+  const handleManualSave = async () => {
+    if (!manualForm) return
+
+    try {
+      await grantManualSubscription({
+        id: manualForm.id,
+        // Gün sonuna kadar geçerli olsun; backend gelecekte olmasını şart koşuyor.
+        expires_at: `${manualForm.date}T23:59:59Z`,
+        note: manualForm.note.trim() || undefined
+      }).unwrap()
+      setManualForm(null)
+    } catch (err) {
+      const message =
+        (err as { data?: { error?: string } })?.data?.error ?? 'Abonelik tanımlanamadı.'
+
+      setManualError(message)
+    }
   }
 
   const handleDelete = async () => {
@@ -171,6 +219,13 @@ export default function WorkplacesPage() {
                           <IconButton size='small' onClick={() => handleEditOpen(wp)}>
                             <RiEditLine size={18} />
                           </IconButton>
+                          {isSuperAdmin && (
+                            <Tooltip title='Elden ödeme aboneliği tanımla'>
+                              <IconButton size='small' color='success' onClick={() => handleManualOpen(wp)}>
+                                <RiHandCoinLine size={18} />
+                              </IconButton>
+                            </Tooltip>
+                          )}
                           {isSuperAdmin && (
                             <IconButton size='small' color='error' onClick={() => setDeleteTarget(wp.id)}>
                               <RiDeleteBinLine size={18} />
@@ -280,6 +335,50 @@ export default function WorkplacesPage() {
             {t('common.cancel')}
           </Button>
           <Button variant='contained' onClick={handleEditSave} disabled={isSaving}>
+            {t('common.save')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Elden ödeme aboneliği */}
+      <Dialog open={Boolean(manualForm)} onClose={() => setManualForm(null)} fullWidth maxWidth='xs'>
+        <DialogTitle>Elden Ödeme Aboneliği</DialogTitle>
+        <DialogContent sx={{ pt: 2 }}>
+          <Stack spacing={3} sx={{ mt: 1 }}>
+            <Alert severity='info'>
+              <strong>{manualForm?.name}</strong> için mağazadan bağımsız bir abonelik tanımlanır.
+              Mağaza kaydına dokunulmaz, App Store / Play Store bildirimleri bu kaydı silemez.
+              Tarih geçince erişim kendiliğinden kapanır.
+            </Alert>
+
+            {manualError && <Alert severity='error'>{manualError}</Alert>}
+
+            <TextField
+              label='Erişim bitiş tarihi'
+              type='date'
+              value={manualForm?.date ?? ''}
+              onChange={e => setManualForm(prev => (prev ? { ...prev, date: e.target.value } : prev))}
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+            />
+
+            <TextField
+              label='Not (opsiyonel)'
+              placeholder='ör. 1 aylık nakit tahsilat'
+              value={manualForm?.note ?? ''}
+              onChange={e => setManualForm(prev => (prev ? { ...prev, note: e.target.value } : prev))}
+              fullWidth
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setManualForm(null)}>{t('common.cancel')}</Button>
+          <Button
+            variant='contained'
+            color='success'
+            onClick={handleManualSave}
+            disabled={isGranting || !manualForm?.date}
+          >
             {t('common.save')}
           </Button>
         </DialogActions>

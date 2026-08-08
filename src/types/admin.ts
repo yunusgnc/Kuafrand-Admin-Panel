@@ -552,6 +552,17 @@ export interface UpdateSubscriptionRequest {
   product_id?: string
 }
 
+/**
+ * Elden ödeme alan işletmeye mağazadan bağımsız abonelik tanımlar/uzatır.
+ * Mağaza satırını elle düzenlemek kalıcı değildir — store webhook'ları onu
+ * geri alabilir. Bu uç ayrı bir `manual.cash` satırı yazar.
+ */
+export interface ManualSubscriptionRequest {
+  id: string
+  expires_at: string
+  note?: string
+}
+
 /** Super admin: tek seferde owner + workplace + trial abonelik oluşturma */
 export interface TrialProvisionRequest {
   owner_first_name: string
