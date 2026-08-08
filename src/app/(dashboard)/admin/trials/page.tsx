@@ -63,8 +63,10 @@ export default function TrialProvisionPage() {
   const update = (key: keyof TrialProvisionRequest, value: string | number | undefined) => {
     setResult(null)
     setErrorMessage(null)
+
     if (key === 'workplace_city_id') {
       const num = value === undefined ? undefined : Number(value)
+
       setForm(prev => ({ ...prev, workplace_city_id: num, workplace_district_id: undefined }))
     } else {
       setForm(prev => ({ ...prev, [key]: value }))
@@ -89,11 +91,13 @@ export default function TrialProvisionPage() {
 
       return
     }
+
     if (!workplace_title || !Number.isInteger(workplace_city_id) || workplace_city_id <= 0) {
       setErrorMessage('İşyeri adı ve geçerli il ID zorunludur.')
 
       return
     }
+
     if (!Number.isInteger(workplace_district_id) || workplace_district_id <= 0) {
       setErrorMessage('Geçerli ilçe ID zorunludur.')
 
@@ -125,6 +129,7 @@ export default function TrialProvisionPage() {
 
     try {
       const res = await provisionTrial(payload).unwrap()
+
       setResult(res)
       setForm(defaultForm)
     } catch (err: unknown) {
@@ -132,6 +137,7 @@ export default function TrialProvisionPage() {
         err && typeof err === 'object' && 'data' in err && err.data && typeof (err.data as { error?: string }).error === 'string'
           ? (err.data as { error: string }).error
           : 'Deneme hesabı oluşturulurken bir hata oluştu.'
+
       setErrorMessage(msg)
     }
   }
