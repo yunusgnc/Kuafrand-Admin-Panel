@@ -16,13 +16,19 @@ import {
   Select,
   Stack,
   TextField,
+  Tooltip,
+  Alert,
   Typography
 } from '@mui/material'
-import { RiEditLine } from 'react-icons/ri'
+import { RiEditLine, RiHandCoinLine } from 'react-icons/ri'
 
 import AdminTablePage from '@/components/admin/AdminTablePage'
 import type { Subscription, UpdateSubscriptionRequest } from '@/types/admin'
-import { useGetSubscriptionsQuery, useUpdateSubscriptionMutation } from '@/store/api/adminApi'
+import {
+  useGetSubscriptionsQuery,
+  useUpdateSubscriptionMutation,
+  useGrantManualSubscriptionMutation
+} from '@/store/api/adminApi'
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return '-'
@@ -52,6 +58,15 @@ export default function SubscriptionsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('')
   const [editForm, setEditForm] = useState<UpdateSubscriptionRequest | null>(null)
 
+  const [manualForm, setManualForm] = useState<{
+    workplaceId: string
+    name: string
+    date: string
+    note: string
+  } | null>(null)
+
+  const [manualError, setManualError] = useState<string | null>(null)
+
   const { data, isLoading } = useGetSubscriptionsQuery({
     page: page + 1,
     limit,
@@ -60,6 +75,45 @@ export default function SubscriptionsPage() {
   })
 
   const [updateSubscription, { isLoading: isSaving }] = useUpdateSubscriptionMutation()
+  const [grantManualSubscription, { isLoading: isGranting }] = useGrantManualSubscriptionMutation()
+
+  // ── Elden ödendi ──────────────────────────────────────────────────────────
+  // Bu satırın durumunu elle "Aktif" yapmak kalıcı değil: mağaza satırıysa
+  // App Store / Play Store bildirimi onu tekrar 'expired' yapıp işletmeyi
+  // kapatabiliyor. Elden ödemede mağazadan bağımsız ayrı bir kayıt yazılır ve
+  // işletme + sahip yetkisi birlikte aktifleştirilir.
+  const openManual = (row: Subscription) => {
+    if (!row.workplace_id) return
+
+    const oneMonthLater = new Date()
+
+    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1)
+
+    setManualForm({
+      workplaceId: row.workplace_id,
+      name: row.workplace_title || row.workplace_id,
+      date: oneMonthLater.toISOString().slice(0, 10),
+      note: ''
+    })
+    setManualError(null)
+  }
+
+  const handleManualSave = async () => {
+    if (!manualForm) return
+
+    try {
+      await grantManualSubscription({
+        id: manualForm.workplaceId,
+        expires_at: `${manualForm.date}T23:59:59Z`,
+        note: manualForm.note.trim() || undefined
+      }).unwrap()
+      setManualForm(null)
+    } catch (err) {
+      setManualError(
+        (err as { data?: { error?: string } })?.data?.error ?? 'Abonelik tanımlanamadı.'
+      )
+    }
+  }
 
   const handleSave = async () => {
     if (!editForm) return
@@ -128,19 +182,36 @@ export default function SubscriptionsPage() {
           }
         ]}
         actions={row => (
-          <IconButton
-            size='small'
-            onClick={() =>
-              setEditForm({
-                id: row.id,
-                status: row.status as string,
-                expires_at: row.expires_at as string,
-                product_id: row.product_id as string
-              })
-            }
-          >
-            <RiEditLine size={18} />
-          </IconButton>
+          <Stack direction='row' spacing={0.5}>
+            <Tooltip title='Düzenle'>
+              <IconButton
+                size='small'
+                onClick={() =>
+                  setEditForm({
+                    id: row.id,
+                    status: row.status as string,
+                    expires_at: row.expires_at as string,
+                    product_id: row.product_id as string
+                  })
+                }
+              >
+                <RiEditLine size={18} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Elden ödendi — kalıcı olarak aktifleştir'>
+              {/* disabled IconButton tooltip'i yutar; span sarmalayıcı gerekli */}
+              <span>
+                <IconButton
+                  size='small'
+                  color='success'
+                  disabled={!row.workplace_id}
+                  onClick={() => openManual(row)}
+                >
+                  <RiHandCoinLine size={18} />
+                </IconButton>
+              </span>
+            </Tooltip>
+          </Stack>
         )}
         toolbar={
           <FormControl size='small' sx={{ minWidth: 140 }}>
@@ -206,6 +277,52 @@ export default function SubscriptionsPage() {
           <Button onClick={() => setEditForm(null)}>İptal</Button>
           <Button variant='contained' onClick={handleSave} disabled={isSaving}>
             Kaydet
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Elden ödendi */}
+      <Dialog open={Boolean(manualForm)} onClose={() => setManualForm(null)} fullWidth maxWidth='xs'>
+        <DialogTitle>Elden Ödendi</DialogTitle>
+        <DialogContent sx={{ pt: 2 }}>
+          <Stack spacing={3} sx={{ mt: 1 }}>
+            <Alert severity='success'>
+              <strong>{manualForm?.name}</strong> seçilen tarihe kadar tamamen aktifleşir:
+              abonelik, işletme ve mekan sahibinin yetkisi birlikte açılır.
+              <br />
+              Mağaza kaydına dokunulmaz; App Store / Play Store bildirimleri bu kaydı silemez.
+              Tarih geçince erişim kendiliğinden kapanır.
+            </Alert>
+
+            {manualError && <Alert severity='error'>{manualError}</Alert>}
+
+            <TextField
+              label='Erişim bitiş tarihi'
+              type='date'
+              value={manualForm?.date ?? ''}
+              onChange={e => setManualForm(prev => (prev ? { ...prev, date: e.target.value } : prev))}
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+            />
+
+            <TextField
+              label='Not (opsiyonel)'
+              placeholder='ör. 1 aylık nakit tahsilat'
+              value={manualForm?.note ?? ''}
+              onChange={e => setManualForm(prev => (prev ? { ...prev, note: e.target.value } : prev))}
+              fullWidth
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setManualForm(null)}>İptal</Button>
+          <Button
+            variant='contained'
+            color='success'
+            onClick={handleManualSave}
+            disabled={isGranting || !manualForm?.date}
+          >
+            Aktifleştir
           </Button>
         </DialogActions>
       </Dialog>

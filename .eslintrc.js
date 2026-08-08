@@ -123,7 +123,7 @@ module.exports = {
         '@typescript-eslint/triple-slash-reference': 'off'
       }
     },
-npm    {
+    {
       files: ['*.ts', '*.tsx', 'src/iconify-bundle/*'],
       rules: {
         '@typescript-eslint/explicit-module-boundary-types': 'off',

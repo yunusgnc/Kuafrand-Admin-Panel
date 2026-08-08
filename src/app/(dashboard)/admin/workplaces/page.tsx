@@ -52,12 +52,14 @@ export default function WorkplacesPage() {
   const [search, setSearch] = useState('')
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
   const [editForm, setEditForm] = useState<UpdateWorkplaceRequest | null>(null)
+
   const [manualForm, setManualForm] = useState<{
     id: string
     name: string
     date: string
     note: string
   } | null>(null)
+
   const [manualError, setManualError] = useState<string | null>(null)
   const searchInputId = 'workplaces-search'
   const rowsPerPageLabelId = 'workplaces-rows-per-page-label'
@@ -101,6 +103,7 @@ export default function WorkplacesPage() {
     try {
       await grantManualSubscription({
         id: manualForm.id,
+
         // Gün sonuna kadar geçerli olsun; backend gelecekte olmasını şart koşuyor.
         expires_at: `${manualForm.date}T23:59:59Z`,
         note: manualForm.note.trim() || undefined
